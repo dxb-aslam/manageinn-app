@@ -15,6 +15,7 @@ import { IonContent, IonPage, IonInput, IonButton, IonItem, IonLabel, IonSpinner
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { error as toastError } from '@/services/toast';
+import { initPush } from '@/services/push';
 import MILogo from '@/components/MILogo.vue';
 
 const router = useRouter();
@@ -36,6 +37,9 @@ async function submit(): Promise<void> {
   errMsg.value = '';
   try {
     await auth.login(u, p);
+    // Fire-and-forget push registration on the new session. Doesn't
+    // block navigation — the FCM handshake takes a beat.
+    void initPush(router);
     router.replace('/home');
   } catch (e: any) {
     errMsg.value = e?.message || 'Login failed';

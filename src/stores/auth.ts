@@ -19,6 +19,7 @@
 import { defineStore } from 'pinia';
 import { api, clearCreds, readCreds, storeCreds } from '@/services/http';
 import { gotoAuthRoot } from '@/services/navigation';
+import { unregisterCurrent as unregisterPush } from '@/services/push';
 
 interface Property {
   name: string;
@@ -155,6 +156,10 @@ export const useAuthStore = defineStore('auth', {
 
     /** Sign out — wipe creds + reset state + navigate to /login. */
     async logout(): Promise<void> {
+      // Unregister this device's push token first — best-effort, the
+      // server-side endpoint is forgiving of expired sessions.
+      try { await unregisterPush(); } catch { /* ignore */ }
+
       try {
         // Best-effort server-side logout. The token isn't actually invalidated
         // by Frappe on this call (the api_secret remains valid) but on next

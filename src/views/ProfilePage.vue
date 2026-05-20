@@ -85,11 +85,11 @@ function changeSite(): void {
               <p>Open the Frappe Desk in a browser</p>
             </IonLabel>
           </IonItem>
-          <IonItem button @click="changeSite" :detail="true">
+          <IonItem button @click="router.push('/settings')" :detail="true">
             <IonIcon slot="start" :icon="settingsOutline" />
             <IonLabel>
-              <h3>Bench URL</h3>
-              <p>{{ siteUrl }}</p>
+              <h3>App settings</h3>
+              <p>Biometric unlock, bench URL, version</p>
             </IonLabel>
           </IonItem>
         </IonList>

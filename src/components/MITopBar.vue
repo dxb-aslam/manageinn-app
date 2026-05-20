@@ -1,31 +1,32 @@
 <!--
   MITopBar — branded IonHeader replacement.
 
-  Compact bar with the wordmark on the left, current property name as
-  subtitle, and an optional `actions` slot on the right. Used inside the
-  IonContent of pages (not as IonHeader) so IonContent's gradient flows
-  behind it.
+  Logo on the left, PropertySwitcher chip below the wordmark (tappable
+  when the user has 2+ properties — opens an action sheet). Optional
+  `actions` slot on the right.
 
-  For pages that need the Ionic back-button + safe-area handling, use
-  IonHeader/IonToolbar directly; this is for the tab-root pages.
+  Used inside IonContent of tab-root pages (not as IonHeader) so the
+  warm gradient flows behind it.
 -->
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import MILogo from './MILogo.vue';
+import PropertySwitcher from './PropertySwitcher.vue';
 
 defineProps<{
   title?: string;
 }>();
 
 const auth = useAuthStore();
-const subtitle = computed(() => auth.propertyName || '');
 </script>
 
 <template>
   <header class="mi-topbar">
     <div class="mi-topbar-brand">
-      <MILogo size="sm" :with-subtitle="!!subtitle" :subtitle="subtitle" />
+      <div class="mi-topbar-brand-row">
+        <MILogo size="sm" />
+        <PropertySwitcher />
+      </div>
     </div>
     <div v-if="$slots.actions" class="mi-topbar-actions">
       <slot name="actions" />
@@ -49,5 +50,11 @@ const subtitle = computed(() => auth.propertyName || '');
   border-bottom: 1px solid var(--ion-border-color);
 }
 .mi-topbar-brand { flex: 1; min-width: 0; }
+.mi-topbar-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 .mi-topbar-actions { display: flex; align-items: center; gap: 8px; }
 </style>

@@ -87,10 +87,20 @@
   resolved "https://registry.yarnpkg.com/@capacitor/keyboard/-/keyboard-7.0.6.tgz#730e0fd969f488a0562a98dc2a3f936f2a449c0c"
   integrity sha512-mH9EHo4EnBA9zJAi6domGVB/PdEkcm0h27nJDHG4Y3fd2oKsheCxDRXlYrbgj8hcyQPe0cGWqAfzfwKzkWQoFQ==
 
+"@capacitor/local-notifications@^8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/local-notifications/-/local-notifications-8.2.0.tgz#c7e13d6748f4954353d26d4663d181e8af2d2dd2"
+  integrity sha512-fvLY0w2w4MiX+DD4+Wv4DOwOLdzKZsMDwAcRv/Juudd+QbKbn69s6cM3xVqPwAiDqfnqsY4/S8xtQD6M73wY2A==
+
 "@capacitor/preferences@^7.0.2":
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/@capacitor/preferences/-/preferences-7.0.4.tgz#f81f5188861962712799fb2be65550cbfc22542e"
   integrity sha512-TJhkwaI2RCs/iDC9PjNczZV4h6JM4gUtTuKMeFdy0OwGgFEHf4TrtW2mFMc1TnPDalYQ91p9NT+UKgiJs9/xtg==
+
+"@capacitor/push-notifications@^8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/push-notifications/-/push-notifications-8.1.1.tgz#ee910f95350395b9a0362d5b5a7bd3d5ca8ef095"
+  integrity sha512-WqzjPKIbYbARMN+GC0XMAJcxJpUUzqgzS/Ny8RODLrro38pQhm3GXYwX2Mwd+LZlLY39rGImkCkrKyQSNfuikA==
 
 "@capacitor/share@^8.0.1":
   version "8.0.1"
@@ -101,6 +111,11 @@
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@capacitor/status-bar/-/status-bar-7.0.6.tgz#395464ae725da229934fad6ae68747cd4c6de1de"
   integrity sha512-7AVqj46b26QikImQzWfsJmzG8NUJZBGkrVSuoeTo+SX/YH3hXH0MqwwFgMqMGHfa/BICDgSvTjM9miVFlq0+RQ==
+
+"@capgo/capacitor-native-biometric@^8.4.5":
+  version "8.4.5"
+  resolved "https://registry.yarnpkg.com/@capgo/capacitor-native-biometric/-/capacitor-native-biometric-8.4.5.tgz#575988c09d0c7b2f7130b7c106a6bda49ce020eb"
+  integrity sha512-wTIdngpibWLKr8GdUTyRBQ5xIDFsb6XzZlZ4qtF19hciZHkG49YL36rwNTmkN8XqSqGp59sogDDgtD0MNkgiWA==
 
 "@esbuild/aix-ppc64@0.20.2":
   version "0.20.2"

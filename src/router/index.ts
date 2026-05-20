@@ -32,6 +32,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/requests',   component: () => import('@/views/RequestsPage.vue') },
   { path: '/rooms',      component: () => import('@/views/RoomsPage.vue') },
   { path: '/profile',    component: () => import('@/views/ProfilePage.vue') },
+  { path: '/settings',   component: () => import('@/views/SettingsPage.vue') },
 
   // Catch-all
   { path: '/:pathMatch(.*)*', redirect: '/splash' },
