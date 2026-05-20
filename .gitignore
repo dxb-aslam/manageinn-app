@@ -36,3 +36,6 @@ yarn-error.log*
 
 # TS
 *.tsbuildinfo
+
+# vue-tsc sometimes emits .vue.js stubs alongside the .vue files. Not source.
+src/**/*.vue.js
