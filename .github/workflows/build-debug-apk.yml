@@ -67,6 +67,25 @@ jobs:
           npx cap add android || echo "android/ already exists (cache hit)"
           npx cap sync android
 
+      - name: Pin androidx versions for Capacitor 7
+        # Capacitor 7's bundled AGP (8.7.2) can't use the latest
+        # androidx.core (1.17.0+) — that needs AGP 8.9.1 + compileSdk 36.
+        # Override the version map in the generated variables.gradle to use
+        # the last androidx.core that works on AGP 8.7.2.
+        # Remove this block when Capacitor 8 lands in our deps.
+        run: |
+          VG=android/variables.gradle
+          if [ -f "$VG" ]; then
+            sed -i "s/androidxCoreVersion = '[^']*'/androidxCoreVersion = '1.15.0'/" "$VG" || true
+            sed -i "s/androidxCoreSplashscreenVersion = '[^']*'/androidxCoreSplashscreenVersion = '1.0.1'/" "$VG" || true
+            sed -i "s/androidxActivityVersion = '[^']*'/androidxActivityVersion = '1.9.3'/" "$VG" || true
+            sed -i "s/androidxFragmentVersion = '[^']*'/androidxFragmentVersion = '1.8.5'/" "$VG" || true
+            echo "--- variables.gradle after pinning ---"
+            cat "$VG"
+          else
+            echo "::warning::variables.gradle not found at $VG"
+          fi
+
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
