@@ -67,20 +67,32 @@ jobs:
           npx cap add android || echo "android/ already exists (cache hit)"
           npx cap sync android
 
-      - name: Pin androidx versions for Capacitor 7
-        # Capacitor 7's bundled AGP (8.7.2) can't use the latest
-        # androidx.core (1.17.0+) — that needs AGP 8.9.1 + compileSdk 36.
+      - name: Patch Android build for Capacitor 7 + plugin versions
+        # Two unrelated patches we have to apply post-`cap add android`:
         #
-        # variables.gradle alone doesn't help because the offending versions
-        # are being pulled in transitively (likely by the @capacitor/camera
-        # and @capacitor/share v8 plugins via androidx.core-ktx). We need a
-        # hard resolutionStrategy.force at the app project level — that
-        # overrides ANY transitive version request.
+        # 1. minSdk bump 23 → 24
+        #    @capacitor/camera v8 ships ioncamera-android:1.0.1 which
+        #    declares minSdk 24 — older than the Capacitor 7 default of 23.
+        #    Bumping minSdk drops Android 5.x devices, which are <1%
+        #    market share in 2026, so the trade-off is fine.
         #
-        # When we upgrade to Capacitor 8 (AGP 8.9+, compileSdk 36) this
-        # block can be removed.
+        # 2. Pin androidx.core et al. via resolutionStrategy.force
+        #    Latest androidx.core (1.17.0) needs AGP 8.9.1; Capacitor 7
+        #    ships AGP 8.7.2. Force the last compatible version.
+        #
+        # All of this goes away when we upgrade to Capacitor 8.
         run: |
+          VG=android/variables.gradle
           BG=android/app/build.gradle
+
+          # 1. minSdk bump
+          if [ -f "$VG" ]; then
+            sed -i "s/minSdkVersion = 23/minSdkVersion = 24/" "$VG"
+            echo "--- variables.gradle after minSdk bump ---"
+            grep -i 'sdk' "$VG"
+          fi
+
+          # 2. resolutionStrategy.force for androidx
           if [ -f "$BG" ]; then
             cat >> "$BG" <<'GRADLE'
 
@@ -97,10 +109,6 @@ jobs:
               }
           }
           GRADLE
-            echo "--- app/build.gradle tail after injection ---"
-            tail -25 "$BG"
-          else
-            echo "::warning::$BG not found"
           fi
 
       - name: Build debug APK
