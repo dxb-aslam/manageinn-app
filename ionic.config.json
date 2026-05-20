@@ -1,0 +1,7 @@
+{
+  "name": "manageinn",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}

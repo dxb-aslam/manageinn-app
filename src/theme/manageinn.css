@@ -1,0 +1,76 @@
+/*
+ * Manage Inn app-specific styles — sits on top of Ionic's defaults +
+ * variables.css. Mirrors the web app's vibe: serif body (Lora), italic
+ * display (Lora italic + Caveat for asides), warm cream/terra surfaces.
+ *
+ * Loaded from main.ts AFTER variables.css. Anything that overrides Ionic
+ * defaults at the structural level belongs here.
+ */
+
+/* Google Fonts — same families as the web app */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Caveat:wght@500;600;700&display=swap');
+
+/* Brand typography helpers */
+.mi-font-display {
+  font-family: 'Lora', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+.mi-font-hand {
+  font-family: 'Caveat', cursive;
+}
+
+/* Wavy honey underline used on the "Manage Inn" wordmark */
+.mi-underline-wavy {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--mi-honey);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+
+/* Soft warm radial gradient — same as the web app body background */
+ion-content {
+  --background:
+    radial-gradient(900px 500px at 100% -5%, rgba(196, 101, 74, 0.10), transparent 60%),
+    radial-gradient(700px 400px at -5% 25%, rgba(212, 145, 46, 0.08), transparent 60%),
+    radial-gradient(600px 400px at 100% 110%, rgba(90, 122, 110, 0.08), transparent 60%),
+    #fdf6eb;
+}
+
+/* Tactile-shadow button — 2px offset, no blur. Matches the web app's signature CTA. */
+.mi-btn-tactile {
+  --background: var(--mi-terra);
+  --background-hover: var(--mi-terra-d);
+  --background-activated: var(--mi-terra-d);
+  --color: var(--mi-paper);
+  --box-shadow: 0 2px 0 var(--mi-terra-d);
+  --border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Status pill — used in Booking list rows */
+.mi-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.mi-status-pill.enquiry    { background: #d4912e33; color: #8b5e1e; border-color: rgba(212, 145, 46, 0.45); }
+.mi-status-pill.confirmed  { background: #5a7a6e26; color: #3d5c52; border-color: rgba(90, 122, 110, 0.4); }
+.mi-status-pill.checkedin  { background: #c4654a2e; color: #a04a32; border-color: rgba(196, 101, 74, 0.4); }
+.mi-status-pill.checkedout { background: #2a221a0f; color: #2a221a8c; border-color: rgba(42, 34, 26, 0.12); }
+.mi-status-pill.cancelled,
+.mi-status-pill.noshow     { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+
+/* Card hover lift — borrowed from web app's `.lift` class */
+.mi-lift {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.mi-lift:active {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -10px rgba(42, 34, 26, 0.15);
+}

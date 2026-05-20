@@ -1,0 +1,121 @@
+name: Build Debug APK
+
+# Builds an Android debug APK on every push to main + on manual trigger.
+# Attaches the APK to a rolling pre-release named "latest-debug" so the
+# user can always grab the current dev build from
+#   https://github.com/<repo>/releases/tag/latest-debug
+#
+# Why a separate "latest-debug" tag rather than per-commit releases?
+#   - The APK changes every push during early development; we don't want
+#     50 release entries
+#   - Easy permanent URL for QA folks to grab the latest
+#   - Bumping the tag moves the asset, so the link is stable
+#
+# Build cost: ~3–4 min on the free runner. We cache yarn + Gradle so
+# subsequent builds are closer to 90 sec.
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+  workflow_dispatch:
+
+permissions:
+  contents: write     # needed to create / update releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Setup Java (Android needs JDK 21)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build web bundle
+        run: yarn build
+
+      - name: Add Android platform
+        # capacitor.config.ts + the dist/ are required before `cap add android`.
+        # The `android/` folder isn't committed (gitignored), so we generate
+        # it fresh in CI on every build.
+        run: |
+          npx cap add android || echo "android/ already exists (cache hit)"
+          npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Locate APK
+        id: locate
+        run: |
+          APK_PATH=$(find android/app/build/outputs/apk/debug -name "*.apk" | head -1)
+          if [ -z "$APK_PATH" ]; then
+            echo "::error::Could not find a debug APK in android/app/build/outputs/apk/debug/"
+            exit 1
+          fi
+          echo "Found APK at $APK_PATH"
+          # Friendly name: manageinn-debug-{short_sha}.apk
+          SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          FRIENDLY="manageinn-debug-${SHA}.apk"
+          cp "$APK_PATH" "$FRIENDLY"
+          echo "apk=$FRIENDLY" >> "$GITHUB_OUTPUT"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manageinn-debug-apk
+          path: ${{ steps.locate.outputs.apk }}
+          retention-days: 14
+
+      - name: Update "latest-debug" rolling release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-debug
+          name: Latest debug build
+          body: |
+            **Auto-built debug APK from `main` (commit ${{ github.sha }}).**
+
+            ⚠️ This is a dev build — debug signing key, not for distribution.
+            It points at the bench URL configured at first launch (default
+            `https://manageinn.dxbitz.com`; change in Profile → Bench URL).
+
+            Install on Android:
+              1. Download `.apk`
+              2. Enable "Install unknown apps" for your browser
+              3. Open the file and tap Install
+
+            iOS not built — Capacitor iOS requires a Mac runner + signing
+            certificate, which costs money. Test the iOS path locally via
+            `npx cap run ios`.
+          files: ${{ steps.locate.outputs.apk }}
+          prerelease: true
+          make_latest: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

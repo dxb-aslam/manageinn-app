@@ -1,0 +1,90 @@
+/*
+ * Ionic CSS Variables — Manage Inn palette
+ *
+ * The web app's terra/cream/sage warmth, translated into Ionic's
+ * --ion-color-* system. Keep these in sync with the web app's style.css
+ * if you change a color there. The wordmark wavy underline + Caveat
+ * asides come from manageinn.css.
+ */
+
+:root {
+  /* Brand */
+  --mi-terra:      #c4654a;
+  --mi-terra-d:    #a04a32;
+  --mi-cream:      #fdf6eb;
+  --mi-paper:      #fdfaf3;
+  --mi-ink:        #2a221a;
+  --mi-sage:       #5a7a6e;
+  --mi-sage-d:     #3d5c52;
+  --mi-honey:      #d4912e;
+  --mi-honey-d:    #8a5c0e;
+
+  /* ---- Ionic primary = terra ---- */
+  --ion-color-primary: #c4654a;
+  --ion-color-primary-rgb: 196, 101, 74;
+  --ion-color-primary-contrast: #fdfaf3;
+  --ion-color-primary-contrast-rgb: 253, 250, 243;
+  --ion-color-primary-shade: #a04a32;
+  --ion-color-primary-tint: #ce7d65;
+
+  /* ---- Ionic secondary = sage ---- */
+  --ion-color-secondary: #5a7a6e;
+  --ion-color-secondary-rgb: 90, 122, 110;
+  --ion-color-secondary-contrast: #fdfaf3;
+  --ion-color-secondary-contrast-rgb: 253, 250, 243;
+  --ion-color-secondary-shade: #3d5c52;
+  --ion-color-secondary-tint: #6f8c81;
+
+  /* ---- Tertiary = honey ---- */
+  --ion-color-tertiary: #d4912e;
+  --ion-color-tertiary-rgb: 212, 145, 46;
+  --ion-color-tertiary-contrast: #fdfaf3;
+  --ion-color-tertiary-contrast-rgb: 253, 250, 243;
+  --ion-color-tertiary-shade: #8a5c0e;
+  --ion-color-tertiary-tint: #d9a14b;
+
+  /* Status colors (matching web app's StatusBadge) */
+  --ion-color-success: #3d5c52;
+  --ion-color-success-rgb: 61, 92, 82;
+  --ion-color-success-contrast: #fdfaf3;
+  --ion-color-success-contrast-rgb: 253, 250, 243;
+  --ion-color-success-shade: #2d4640;
+  --ion-color-success-tint: #527368;
+
+  --ion-color-warning: #d4912e;
+  --ion-color-warning-rgb: 212, 145, 46;
+  --ion-color-warning-contrast: #2a221a;
+  --ion-color-warning-contrast-rgb: 42, 34, 26;
+  --ion-color-warning-shade: #8a5c0e;
+  --ion-color-warning-tint: #d9a14b;
+
+  --ion-color-danger: #b91c1c;
+  --ion-color-danger-rgb: 185, 28, 28;
+  --ion-color-danger-contrast: #fdfaf3;
+  --ion-color-danger-contrast-rgb: 253, 250, 243;
+  --ion-color-danger-shade: #991a1a;
+  --ion-color-danger-tint: #c43838;
+
+  /* Surfaces */
+  --ion-background-color: #fdf6eb;
+  --ion-background-color-rgb: 253, 246, 235;
+  --ion-text-color: #2a221a;
+  --ion-text-color-rgb: 42, 34, 26;
+
+  --ion-toolbar-background: #fdfaf3;
+  --ion-toolbar-color: #2a221a;
+  --ion-toolbar-border-color: rgba(42, 34, 26, 0.08);
+
+  --ion-tab-bar-background: rgba(253, 250, 243, 0.95);
+  --ion-tab-bar-color: rgba(42, 34, 26, 0.55);
+  --ion-tab-bar-color-selected: #c4654a;
+
+  --ion-card-background: #fdfaf3;
+  --ion-item-background: #fdfaf3;
+
+  /* Borders / dividers */
+  --ion-border-color: rgba(42, 34, 26, 0.08);
+
+  /* Default font — Lora is the web app's serif; Caveat is the hand asides */
+  --ion-font-family: 'Lora', Georgia, 'Times New Roman', serif;
+}
