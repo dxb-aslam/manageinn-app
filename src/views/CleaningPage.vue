@@ -156,7 +156,7 @@ function statusColor(s: string): string {
           v-else-if="!visible.length"
           emoji="🧹"
           :headline="filter === 'all' ? 'No cleaning tasks yet' : 'Nothing in this filter'"
-          :body="filter === 'all' ? 'Tasks auto-spawn when bookings check out, or when a guest taps "Request cleaning".' : ''"
+          :body="filter === 'all' ? 'Tasks auto-spawn when bookings check out, or when a guest taps “Request cleaning”.' : ''"
         />
 
         <ul v-else class="rows">

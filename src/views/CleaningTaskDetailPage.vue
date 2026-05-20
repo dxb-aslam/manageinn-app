@@ -21,10 +21,18 @@ import { useAuthStore } from '@/stores/auth';
 import { api } from '@/services/http';
 import { ok, error as toastError } from '@/services/toast';
 
-interface ChecklistItem {
+// Wire shape coming from the bench — is_done is 0/1 in Frappe
+interface ApiChecklistItem {
   item_name: string;
   is_done: number | boolean;
   note?: string;
+}
+
+// Local shape we bind to in the template (IonCheckbox needs a real bool)
+interface LocalChecklistItem {
+  item_name: string;
+  is_done: boolean;
+  note: string;
 }
 
 interface CleaningTaskFull {
@@ -39,7 +47,7 @@ interface CleaningTaskFull {
   started_at?: string;
   completed_at?: string;
   notes?: string;
-  items: ChecklistItem[];
+  items: ApiChecklistItem[];
   booking?: string;
 }
 
@@ -48,7 +56,7 @@ const router = useRouter();
 const auth = useAuthStore();
 
 const task = ref<CleaningTaskFull | null>(null);
-const items = ref<ChecklistItem[]>([]);
+const items = ref<LocalChecklistItem[]>([]);
 const notes = ref('');
 const newItem = ref('');
 const loading = ref(true);
