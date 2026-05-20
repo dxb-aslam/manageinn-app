@@ -70,20 +70,37 @@ jobs:
       - name: Pin androidx versions for Capacitor 7
         # Capacitor 7's bundled AGP (8.7.2) can't use the latest
         # androidx.core (1.17.0+) — that needs AGP 8.9.1 + compileSdk 36.
-        # Override the version map in the generated variables.gradle to use
-        # the last androidx.core that works on AGP 8.7.2.
-        # Remove this block when Capacitor 8 lands in our deps.
+        #
+        # variables.gradle alone doesn't help because the offending versions
+        # are being pulled in transitively (likely by the @capacitor/camera
+        # and @capacitor/share v8 plugins via androidx.core-ktx). We need a
+        # hard resolutionStrategy.force at the app project level — that
+        # overrides ANY transitive version request.
+        #
+        # When we upgrade to Capacitor 8 (AGP 8.9+, compileSdk 36) this
+        # block can be removed.
         run: |
-          VG=android/variables.gradle
-          if [ -f "$VG" ]; then
-            sed -i "s/androidxCoreVersion = '[^']*'/androidxCoreVersion = '1.15.0'/" "$VG" || true
-            sed -i "s/androidxCoreSplashscreenVersion = '[^']*'/androidxCoreSplashscreenVersion = '1.0.1'/" "$VG" || true
-            sed -i "s/androidxActivityVersion = '[^']*'/androidxActivityVersion = '1.9.3'/" "$VG" || true
-            sed -i "s/androidxFragmentVersion = '[^']*'/androidxFragmentVersion = '1.8.5'/" "$VG" || true
-            echo "--- variables.gradle after pinning ---"
-            cat "$VG"
+          BG=android/app/build.gradle
+          if [ -f "$BG" ]; then
+            cat >> "$BG" <<'GRADLE'
+
+          // ── injected by CI: pin androidx for Capacitor 7's AGP 8.7.2 ──
+          configurations.all {
+              resolutionStrategy {
+                  force 'androidx.core:core:1.15.0'
+                  force 'androidx.core:core-ktx:1.15.0'
+                  force 'androidx.activity:activity:1.9.3'
+                  force 'androidx.activity:activity-ktx:1.9.3'
+                  force 'androidx.fragment:fragment:1.8.5'
+                  force 'androidx.fragment:fragment-ktx:1.8.5'
+                  force 'androidx.core:core-splashscreen:1.0.1'
+              }
+          }
+          GRADLE
+            echo "--- app/build.gradle tail after injection ---"
+            tail -25 "$BG"
           else
-            echo "::warning::variables.gradle not found at $VG"
+            echo "::warning::$BG not found"
           fi
 
       - name: Build debug APK
